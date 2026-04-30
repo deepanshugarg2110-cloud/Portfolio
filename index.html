@@ -25,15 +25,15 @@
     --green: #4ade80;
     --red: #f87171;
     --blue: #6c8eff;
- 
+
     --serif: "Fraunces", "Times New Roman", serif;
     --sans: "Manrope", system-ui, sans-serif;
     --mono: "JetBrains Mono", "Courier New", monospace;
- 
+
     --max: 1280px;
     --gutter: clamp(20px, 4vw, 56px);
   }
- 
+
   /* ---------- RESET ---------- */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
@@ -51,7 +51,7 @@
   button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
   img, svg { display: block; max-width: 100%; }
   ::selection { background: var(--gold); color: #0a0e17; }
- 
+
   /* ---------- BACKGROUND ATMOSPHERE ---------- */
   body::before {
     content: "";
@@ -71,10 +71,145 @@
     background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
     opacity: 0.5;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
     mix-blend-mode: overlay;
   }
- 
+
+  /* ---------- LIVE DASHBOARD BACKGROUND ---------- */
+  .bg-dashboard {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(212, 165, 116, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 165, 116, 0.045) 1px, transparent 1px);
+    background-size: 90px 90px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 25%, transparent 80%);
+            mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 25%, transparent 80%);
+    animation: grid-breathe 9s ease-in-out infinite;
+  }
+  @keyframes grid-breathe {
+    0%, 100% { opacity: 0.45; }
+    50%       { opacity: 1; }
+  }
+  .bg-trajectory {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+  }
+  .bg-trajectory .traj-line {
+    fill: none;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    pathLength: 1;
+    stroke-dasharray: 0 1;
+  }
+
+  .bg-panel {
+    position: absolute;
+    font-family: var(--mono);
+    background: rgba(20, 26, 44, 0.42);
+    border: 1px solid rgba(244, 241, 232, 0.06);
+    border-radius: 8px;
+    padding: 11px 13px;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0.6;
+    will-change: transform;
+    transition: opacity 0.4s ease;
+  }
+  .bg-panel__head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    font-size: 9.5px;
+    color: var(--ink-dim);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .bg-panel__sym { font-weight: 600; color: var(--ink-muted); }
+  .bg-panel__live {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px rgba(74, 222, 128, 0.6);
+    animation: pulse 1.5s ease infinite;
+  }
+  .bg-panel__row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 10px;
+  }
+  .bg-panel__price {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    letter-spacing: -0.01em;
+  }
+  .bg-panel__chg { font-size: 9.5px; letter-spacing: 0.05em; }
+  .bg-panel__chg.up   { color: var(--green); }
+  .bg-panel__chg.down { color: var(--red); }
+  .bg-panel__chart { width: 100%; height: 28px; margin-top: 4px; display: block; }
+  .bg-panel__chart polyline { fill: none; stroke-width: 1.2; opacity: 0.85; }
+
+  /* Strategic positioning */
+  .bg-panel-1 { top: 11%;  right: 3%;  width: 162px; }
+  .bg-panel-2 { top: 36%;  left: 2.5%; width: 168px; }
+  .bg-panel-3 { top: 64%;  right: 4%;  width: 152px; }
+  .bg-panel-4 { top: 82%;  left: 5%;   width: 165px; }
+  .bg-panel-5 { top: 22%;  left: 7%;   width: 148px; }
+  .bg-panel-6 { top: 56%;  right: 7%;  width: 172px; }
+
+  @media (max-width: 1100px) {
+    .bg-panel-2, .bg-panel-5 { display: none; }
+    .bg-panel { opacity: 0.45; }
+  }
+  @media (max-width: 700px) {
+    .bg-panel-3, .bg-panel-6 { display: none; }
+  }
+
+  /* Side number streams */
+  .bg-stream {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 64px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(212, 165, 116, 0.18);
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 18%, black 82%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, black 18%, black 82%, transparent 100%);
+  }
+  .bg-stream--left  { left: 1%;  }
+  .bg-stream--right { right: 1%; }
+  .bg-stream__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px 0;
+    animation: stream 38s linear infinite;
+  }
+  .bg-stream--right .bg-stream__inner {
+    animation-direction: reverse;
+    animation-duration: 46s;
+  }
+  .bg-stream__inner span { display: block; text-align: center; }
+  .bg-stream__inner span b { color: rgba(244, 241, 232, 0.35); font-weight: 500; }
+  @keyframes stream {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-50%); }
+  }
+  @media (max-width: 900px) { .bg-stream { display: none; } }
+
   /* ---------- CUSTOM CURSOR ---------- */
   .cursor-dot, .cursor-ring {
     position: fixed;
@@ -101,7 +236,7 @@
     background: rgba(212, 165, 116, 0.08);
   }
   @media (max-width: 900px) { .cursor-dot, .cursor-ring { display: none; } }
- 
+
   /* ---------- SCROLL PROGRESS ---------- */
   .scroll-progress {
     position: fixed;
@@ -112,7 +247,7 @@
     z-index: 9998;
     box-shadow: 0 0 12px rgba(212, 165, 116, 0.6);
   }
- 
+
   /* ---------- TICKER ---------- */
   .ticker {
     position: relative;
@@ -139,7 +274,7 @@
   .ticker__item .chg.down { color: var(--red); }
   .ticker__item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-dim); }
   @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
- 
+
   /* ---------- NAV ---------- */
   .nav {
     position: sticky;
@@ -201,10 +336,10 @@
   .nav__links a:hover { color: var(--ink); }
   .nav__links a:hover::after { width: 100%; }
   @media (max-width: 800px) { .nav__links { display: none; } }
- 
+
   /* ---------- LAYOUT ---------- */
-  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 2; }
-  section { position: relative; padding: clamp(80px, 12vw, 140px) 0; z-index: 2; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 3; }
+  section { position: relative; padding: clamp(80px, 12vw, 140px) 0; z-index: 3; }
   .eyebrow {
     font-family: var(--mono);
     font-size: 11px;
@@ -235,7 +370,7 @@
     color: var(--gold);
     font-weight: 400;
   }
- 
+
   /* ---------- HERO ---------- */
   .hero { padding: 80px 0 60px; min-height: 90vh; display: flex; align-items: center; }
   .hero__grid {
@@ -266,7 +401,7 @@
   .hero__title .word:nth-child(3) span { animation-delay: 0.3s; }
   .hero__title em { font-style: italic; color: var(--gold); font-weight: 400; }
   @keyframes rise { to { transform: translateY(0); } }
- 
+
   .hero__lede {
     font-size: clamp(16px, 1.5vw, 19px);
     color: var(--ink-muted);
@@ -284,7 +419,7 @@
     animation: fade-in 0.8s ease 0.8s forwards;
   }
   @keyframes fade-in { to { opacity: 1; } }
- 
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -312,7 +447,7 @@
   .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
   .btn .arrow { transition: transform 0.3s ease; }
   .btn:hover .arrow { transform: translateX(4px); }
- 
+
   /* ---------- HERO TERMINAL CARD ---------- */
   .terminal {
     background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
@@ -359,7 +494,7 @@
     0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
     50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
   }
- 
+
   .clocks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
   .clock { padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
   .clock__city { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-dim); margin-bottom: 6px; }
@@ -367,7 +502,7 @@
   .clock__status { font-family: var(--mono); font-size: 9px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.1em; }
   .clock__status.open { color: var(--green); }
   .clock__status.closed { color: var(--red); }
- 
+
   .chart-wrap {
     height: 140px;
     position: relative;
@@ -380,7 +515,7 @@
   .candle.up .wick { stroke: var(--green); }
   .candle.down rect { fill: var(--red); }
   .candle.down .wick { stroke: var(--red); }
- 
+
   .terminal__rows { display: flex; flex-direction: column; gap: 8px; }
   .row {
     display: flex;
@@ -396,7 +531,7 @@
   .row__val { color: var(--ink); font-weight: 500; }
   .row__chg.up { color: var(--green); }
   .row__chg.down { color: var(--red); }
- 
+
   /* ---------- STATS ---------- */
   .stats { padding: 40px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .stats__grid {
@@ -433,7 +568,7 @@
     color: var(--ink-muted);
     line-height: 1.4;
   }
- 
+
   /* ---------- ABOUT ---------- */
   .about__grid {
     display: grid;
@@ -463,7 +598,7 @@
     transition: all 0.3s ease;
   }
   .pill:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
- 
+
   /* ---------- EXPERIENCE TIMELINE ---------- */
   .timeline { position: relative; padding-left: 40px; }
   .timeline::before {
@@ -539,7 +674,7 @@
     color: var(--gold);
     font-family: var(--mono);
   }
- 
+
   /* ---------- SKILLS ---------- */
   .skills__grid {
     display: grid;
@@ -605,7 +740,7 @@
     border-radius: 2px;
     transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
- 
+
   /* ---------- PROJECTS ---------- */
   .filters {
     display: flex;
@@ -626,7 +761,7 @@
   }
   .filter:hover { color: var(--ink); }
   .filter.active { background: var(--gold); border-color: var(--gold); color: #0a0e17; font-weight: 600; }
- 
+
   .projects__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -634,7 +769,7 @@
   }
   @media (max-width: 1000px) { .projects__grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 700px) { .projects__grid { grid-template-columns: 1fr; } }
- 
+
   .project {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -694,7 +829,7 @@
     border-radius: 999px;
   }
   .project.hidden { display: none; }
- 
+
   /* ---------- EDUCATION ---------- */
   .edu-list { display: flex; flex-direction: column; gap: 0; }
   .edu-item {
@@ -728,7 +863,7 @@
   .edu__degree em { font-style: italic; color: var(--gold); }
   .edu__inst { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
   .edu__note { color: var(--ink-muted); font-size: 15px; line-height: 1.65; max-width: 600px; }
- 
+
   /* ---------- CERTIFICATIONS ---------- */
   .certs__intro {
     font-size: 17px;
@@ -868,7 +1003,7 @@
     transition: all 0.3s ease;
   }
   .cert:hover .cert__pill { border-color: rgba(212, 165, 116, 0.3); color: var(--ink); }
- 
+
   /* ---------- CONTACT ---------- */
   .contact { padding-bottom: 60px; }
   .contact__center {
@@ -900,7 +1035,7 @@
   .channel:last-child { border-bottom: 1px solid var(--line); }
   .channel__lbl { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.18em; }
   .channel__val { font-family: var(--serif); font-size: 18px; transition: color 0.3s ease; }
- 
+
   .form {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -948,7 +1083,7 @@
     transition: all 0.3s ease;
   }
   .form__submit:hover { background: var(--gold-bright); transform: translateY(-2px); }
- 
+
   /* ---------- FOOTER ---------- */
   footer {
     padding: 32px 0;
@@ -960,9 +1095,9 @@
     text-transform: uppercase;
     letter-spacing: 0.18em;
     position: relative;
-    z-index: 2;
+    z-index: 3;
   }
- 
+
   /* ---------- REVEAL ANIMATIONS ---------- */
   .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .reveal.in-view { opacity: 1; transform: translateY(0); }
@@ -970,7 +1105,7 @@
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }
   .reveal-delay-4 { transition-delay: 0.4s; }
- 
+
   /* ---------- TOAST ---------- */
   .toast {
     position: fixed;
@@ -994,21 +1129,73 @@
 </style>
 </head>
 <body>
- 
+
 <!-- Custom cursor -->
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
- 
+
 <!-- Scroll progress -->
 <div class="scroll-progress" id="scrollProgress"></div>
- 
+
+<!-- LIVE DASHBOARD BACKGROUND -->
+<div class="bg-dashboard" aria-hidden="true">
+  <div class="bg-grid"></div>
+
+  <svg class="bg-trajectory" viewBox="0 0 1440 900" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="trajGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#d4a574" stop-opacity="0"/>
+        <stop offset="40%"  stop-color="#d4a574" stop-opacity="0.45"/>
+        <stop offset="100%" stop-color="#f5c98a" stop-opacity="0.85"/>
+      </linearGradient>
+    </defs>
+    <path id="trajPath" class="traj-line"
+          d="M 0,760 C 180,750 280,720 360,660 C 460,580 540,560 620,500 C 720,420 800,440 900,360 C 1010,280 1080,260 1180,180 C 1280,110 1360,80 1440,40"
+          stroke="url(#trajGrad)" />
+  </svg>
+
+  <div class="bg-stream bg-stream--left"><div class="bg-stream__inner" id="streamL"></div></div>
+  <div class="bg-stream bg-stream--right"><div class="bg-stream__inner" id="streamR"></div></div>
+
+  <div class="bg-panel bg-panel-1" id="bgP1">
+    <div class="bg-panel__head"><span class="bg-panel__sym">FTSE</span><span class="bg-panel__live"></span></div>
+    <div class="bg-panel__row"><span class="bg-panel__price">—</span><span class="bg-panel__chg up">+0.00%</span></div>
+    <svg class="bg-panel__chart" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points=""/></svg>
+  </div>
+  <div class="bg-panel bg-panel-2" id="bgP2">
+    <div class="bg-panel__head"><span class="bg-panel__sym">S&amp;P</span><span class="bg-panel__live"></span></div>
+    <div class="bg-panel__row"><span class="bg-panel__price">—</span><span class="bg-panel__chg up">+0.00%</span></div>
+    <svg class="bg-panel__chart" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points=""/></svg>
+  </div>
+  <div class="bg-panel bg-panel-3" id="bgP3">
+    <div class="bg-panel__head"><span class="bg-panel__sym">DOW</span><span class="bg-panel__live"></span></div>
+    <div class="bg-panel__row"><span class="bg-panel__price">—</span><span class="bg-panel__chg up">+0.00%</span></div>
+    <svg class="bg-panel__chart" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points=""/></svg>
+  </div>
+  <div class="bg-panel bg-panel-4" id="bgP4">
+    <div class="bg-panel__head"><span class="bg-panel__sym">NASDAQ</span><span class="bg-panel__live"></span></div>
+    <div class="bg-panel__row"><span class="bg-panel__price">—</span><span class="bg-panel__chg up">+0.00%</span></div>
+    <svg class="bg-panel__chart" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points=""/></svg>
+  </div>
+  <div class="bg-panel bg-panel-5" id="bgP5">
+    <div class="bg-panel__head"><span class="bg-panel__sym">GBP/USD</span><span class="bg-panel__live"></span></div>
+    <div class="bg-panel__row"><span class="bg-panel__price">—</span><span class="bg-panel__chg up">+0.00%</span></div>
+    <svg class="bg-panel__chart" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points=""/></svg>
+  </div>
+  <div class="bg-panel bg-panel-6" id="bgP6">
+    <div class="bg-panel__head"><span class="bg-panel__sym">BRENT</span><span class="bg-panel__live"></span></div>
+    <div class="bg-panel__row"><span class="bg-panel__price">—</span><span class="bg-panel__chg up">+0.00%</span></div>
+    <svg class="bg-panel__chart" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points=""/></svg>
+  </div>
+</div>
+
 <!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker__track" id="tickerTrack">
     <!-- populated by JS, duplicated for seamless loop -->
   </div>
 </div>
- 
+
 <!-- NAV -->
 <nav class="nav">
   <div class="nav__inner">
@@ -1027,7 +1214,7 @@
     </div>
   </div>
 </nav>
- 
+
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="wrap">
@@ -1053,13 +1240,13 @@
           </a>
         </div>
       </div>
- 
+
       <div class="terminal" data-hover>
         <div class="terminal__head">
           <div class="terminal__label"><span class="live"></span>Analyst desk · Live</div>
           <div class="terminal__label" id="sessionId">SES · DG-2026</div>
         </div>
- 
+
         <div class="clocks">
           <div class="clock">
             <div class="clock__city">London</div>
@@ -1077,7 +1264,7 @@
             <div class="clock__status" id="statusTYO">—</div>
           </div>
         </div>
- 
+
         <div class="chart-wrap">
           <svg viewBox="0 0 400 140" preserveAspectRatio="none" id="chartSvg">
             <g class="chart-grid">
@@ -1088,7 +1275,7 @@
             <g id="candles"></g>
           </svg>
         </div>
- 
+
         <div class="terminal__rows">
           <div class="row">
             <span class="row__name">REPORTING_CYCLE</span>
@@ -1107,7 +1294,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- STATS -->
 <section class="stats">
   <div class="wrap">
@@ -1131,7 +1318,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- ABOUT -->
 <section id="about">
   <div class="wrap">
@@ -1161,7 +1348,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- EXPERIENCE -->
 <section id="experience">
   <div class="wrap">
@@ -1170,7 +1357,7 @@
       <h2 class="section-title">Professional <em>experience</em>.</h2>
     </div>
     <div class="timeline" style="margin-top: 60px;">
- 
+
       <div class="tl-item reveal">
         <div class="tl-date">July – September 2024</div>
         <div class="tl-role">Finance Intern</div>
@@ -1183,7 +1370,7 @@
           <li>Communicated recommendations to management, leading to adoption of new reporting standards.</li>
         </ul>
       </div>
- 
+
       <div class="tl-item reveal">
         <div class="tl-date">2021 – 2025</div>
         <div class="tl-role">Retail Accountant</div>
@@ -1197,11 +1384,11 @@
           <li>Trained new staff in accounting systems and inventory protocols.</li>
         </ul>
       </div>
- 
+
     </div>
   </div>
 </section>
- 
+
 <!-- SKILLS -->
 <section id="skills">
   <div class="wrap">
@@ -1219,7 +1406,7 @@
         <p>Budgeting, investment research, forecasting models, and comprehensive financial reporting delivered with precision.</p>
         <div class="bar"><div class="bar__fill" data-fill="95"></div></div>
       </div>
- 
+
       <div class="skill-card reveal reveal-delay-1" data-hover>
         <div class="skill-card__head">
           <span class="skill-card__num">02 / 06</span>
@@ -1229,7 +1416,7 @@
         <p>End-to-end management of purchase/sales bills, transaction reconciliation, and automated end-of-day financial reporting.</p>
         <div class="bar"><div class="bar__fill" data-fill="92"></div></div>
       </div>
- 
+
       <div class="skill-card reveal" data-hover>
         <div class="skill-card__head">
           <span class="skill-card__num">03 / 06</span>
@@ -1239,7 +1426,7 @@
         <p>Advanced Excel including automated DCF and forecasting models. Fluent in Google Workspace, PowerPoint, Tally, and basic ERP packages.</p>
         <div class="bar"><div class="bar__fill" data-fill="98"></div></div>
       </div>
- 
+
       <div class="skill-card reveal reveal-delay-1" data-hover>
         <div class="skill-card__head">
           <span class="skill-card__num">04 / 06</span>
@@ -1249,7 +1436,7 @@
         <p>Designed and deployed automated record-keeping and reconciliation systems, measurably improving speed and accuracy.</p>
         <div class="bar"><div class="bar__fill" data-fill="88"></div></div>
       </div>
- 
+
       <div class="skill-card reveal" data-hover>
         <div class="skill-card__head">
           <span class="skill-card__num">05 / 06</span>
@@ -1259,7 +1446,7 @@
         <p>Led cross-functional projects from planning through delivery — inventory coordination, training programmes, and workshops.</p>
         <div class="bar"><div class="bar__fill" data-fill="85"></div></div>
       </div>
- 
+
       <div class="skill-card reveal reveal-delay-1" data-hover>
         <div class="skill-card__head">
           <span class="skill-card__num">06 / 06</span>
@@ -1272,7 +1459,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- CERTIFICATIONS -->
 <section id="credentials">
   <div class="wrap">
@@ -1283,9 +1470,9 @@
         Hands-on virtual experience programmes from leading investment banks and Big Four firms — completed on Forage with verified credentials, each delivering measurable analytical output.
       </p>
     </div>
- 
+
     <div class="certs__grid">
- 
+
       <article class="cert reveal" data-hover>
         <div class="cert__head">
           <span>Credential — 01 / 06</span>
@@ -1303,7 +1490,7 @@
           <span class="cert__pill">Recommendation</span>
         </div>
       </article>
- 
+
       <article class="cert reveal reveal-delay-1" data-hover>
         <div class="cert__head">
           <span>Credential — 02 / 06</span>
@@ -1321,7 +1508,7 @@
           <span class="cert__pill">DCF</span>
         </div>
       </article>
- 
+
       <article class="cert reveal" data-hover>
         <div class="cert__head">
           <span>Credential — 03 / 06</span>
@@ -1339,7 +1526,7 @@
           <span class="cert__pill">Relationship Mgmt</span>
         </div>
       </article>
- 
+
       <article class="cert reveal reveal-delay-1" data-hover>
         <div class="cert__head">
           <span>Credential — 04 / 06</span>
@@ -1357,7 +1544,7 @@
           <span class="cert__pill">Analytical Testing</span>
         </div>
       </article>
- 
+
       <article class="cert reveal" data-hover>
         <div class="cert__head">
           <span>Credential — 05 / 06</span>
@@ -1375,7 +1562,7 @@
           <span class="cert__pill">EV/EBITDA</span>
         </div>
       </article>
- 
+
       <article class="cert reveal reveal-delay-1" data-hover>
         <div class="cert__head">
           <span>Credential — 06 / 06</span>
@@ -1393,11 +1580,11 @@
           <span class="cert__pill">Fixed Income</span>
         </div>
       </article>
- 
+
     </div>
   </div>
 </section>
- 
+
 <!-- PROJECTS -->
 <section id="projects">
   <div class="wrap">
@@ -1405,7 +1592,7 @@
       <div class="eyebrow">Selected Work</div>
       <h2 class="section-title">Key <em>projects</em>.</h2>
     </div>
- 
+
     <div class="filters reveal" id="filters">
       <button class="filter active" data-filter="all" data-hover>All</button>
       <button class="filter" data-filter="Valuation" data-hover>Valuation</button>
@@ -1416,76 +1603,76 @@
       <button class="filter" data-filter="Trading" data-hover>Trading</button>
       <button class="filter" data-filter="Training" data-hover>Training</button>
     </div>
- 
+
     <div class="projects__grid" id="projectsGrid">
- 
+
       <article class="project reveal" data-tag="Valuation" data-hover>
         <div class="project__num">PROJECT — 09</div>
         <h3 class="project__title">Equity Valuation Report — Imperial Brands PLC</h3>
         <p class="project__desc">Comprehensive equity valuation using 25 years of historical data. Applied DCF, dividend discount, and comparable multiples; cross-referenced reformulated statements; delivered fair-value assessment with sensitivity analysis and investment recommendation.</p>
         <span class="project__tag">Valuation</span>
       </article>
- 
+
       <article class="project reveal reveal-delay-1" data-tag="Corporate Finance" data-hover>
         <div class="project__num">PROJECT — 07</div>
         <h3 class="project__title">Statement Reformulation — Imperial Brands PLC</h3>
         <p class="project__desc">Standardised disclosures, isolated core earnings, and prepared restated figures as the foundation for the subsequent equity valuation report. Mirrored the framework applied to BAT.</p>
         <span class="project__tag">Corporate Finance</span>
       </article>
- 
+
       <article class="project reveal reveal-delay-2" data-tag="Corporate Finance" data-hover>
         <div class="project__num">PROJECT — 06</div>
         <h3 class="project__title">Statement Reformulation — British American Tobacco PLC</h3>
         <p class="project__desc">Reclassified line items to separate operating from non-operating activities. Rebuilt the balance sheet into invested-capital format and recalculated key profitability and return metrics for cleaner comparative analysis.</p>
         <span class="project__tag">Corporate Finance</span>
       </article>
- 
+
       <article class="project reveal" data-tag="Econometrics" data-hover>
         <div class="project__num">PROJECT — 08</div>
         <h3 class="project__title">UK Inflation Drivers, 2000–2025</h3>
         <p class="project__desc">Built a quantitative model in Stata identifying short-run drivers of UK inflation across 25 years. Incorporated exchange rates, energy prices, and monetary policy shifts; produced trend visualisations and regression diagnostics.</p>
         <span class="project__tag">Econometrics</span>
       </article>
- 
+
       <article class="project reveal reveal-delay-1" data-tag="Operations" data-hover>
         <div class="project__num">PROJECT — 01</div>
         <h3 class="project__title">Automated Record-Keeping System</h3>
         <p class="project__desc">Led the rollout of a fully automated record-keeping system that improved overall process speed by 30%, reducing manual effort and human error across daily operations.</p>
         <span class="project__tag">Operations</span>
       </article>
- 
+
       <article class="project reveal reveal-delay-2" data-tag="Trading" data-hover>
         <div class="project__num">PROJECT — 04</div>
         <h3 class="project__title">Algorithmic Trading Strategies</h3>
         <p class="project__desc">Developed and back-tested algorithmic trading strategies, growing virtual portfolio value through disciplined data-driven analysis and risk-adjusted entry/exit rules.</p>
         <span class="project__tag">Trading</span>
       </article>
- 
+
       <article class="project reveal" data-tag="Research" data-hover>
         <div class="project__num">PROJECT — 02</div>
         <h3 class="project__title">Patanjali — Marketing Strategy Research</h3>
         <p class="project__desc">Comprehensive research project analysing Patanjali's marketing strategy across pricing, positioning, and distribution; presented actionable growth recommendations.</p>
         <span class="project__tag">Research</span>
       </article>
- 
+
       <article class="project reveal reveal-delay-1" data-tag="Research" data-hover>
         <div class="project__num">PROJECT — 03</div>
         <h3 class="project__title">Consultant-Sector Finance — Internship Report</h3>
         <p class="project__desc">In-depth report analysing best practices in consultant-sector finance. Recommendations were adopted by the team to improve workflow efficiency.</p>
         <span class="project__tag">Research</span>
       </article>
- 
+
       <article class="project reveal reveal-delay-2" data-tag="Training" data-hover>
         <div class="project__num">PROJECT — 05</div>
         <h3 class="project__title">Finance Workshops &amp; Training</h3>
         <p class="project__desc">Designed and delivered finance workshops for new hires across academic and workplace settings, building capability and streamlining onboarding.</p>
         <span class="project__tag">Training</span>
       </article>
- 
+
     </div>
   </div>
 </section>
- 
+
 <!-- EDUCATION -->
 <section id="education">
   <div class="wrap">
@@ -1494,7 +1681,7 @@
       <h2 class="section-title">Education &amp; <em>foundations</em>.</h2>
     </div>
     <div class="edu-list" style="margin-top: 60px;">
- 
+
       <div class="edu-item reveal">
         <div class="edu__year">2025 — Present</div>
         <div>
@@ -1503,7 +1690,7 @@
           <div class="edu__note">Currently deepening expertise in corporate finance, investment analysis, and strategic financial decision-making.</div>
         </div>
       </div>
- 
+
       <div class="edu-item reveal">
         <div class="edu__year">2022 — 2025</div>
         <div>
@@ -1512,7 +1699,7 @@
           <div class="edu__note">Specialised in financial analysis, budgeting, and reporting. Graduated with strong academic standing.</div>
         </div>
       </div>
- 
+
       <div class="edu-item reveal">
         <div class="edu__year">2020 — 2022</div>
         <div>
@@ -1521,7 +1708,7 @@
           <div class="edu__note">82% — strong foundation in commerce and mathematics.</div>
         </div>
       </div>
- 
+
       <div class="edu-item reveal">
         <div class="edu__year">2018 — 2020</div>
         <div>
@@ -1530,11 +1717,11 @@
           <div class="edu__note">82% — Gold Medal, CBSE Cluster Handball. Demonstrated leadership and discipline.</div>
         </div>
       </div>
- 
+
     </div>
   </div>
 </section>
- 
+
 <!-- CONTACT -->
 <section id="contact" class="contact">
   <div class="wrap">
@@ -1567,11 +1754,11 @@
     </div>
   </div>
 </section>
- 
+
 <footer>
   © 2026 Deepanshu Garg · All rights reserved · Built with care
 </footer>
- 
+
 <script>
 /* =========================================================
    1. CUSTOM CURSOR
@@ -1582,12 +1769,12 @@
   const ring = document.getElementById('cursorRing');
   let mx = window.innerWidth / 2, my = window.innerHeight / 2;
   let rx = mx, ry = my;
- 
+
   document.addEventListener('mousemove', e => {
     mx = e.clientX; my = e.clientY;
     dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
   });
- 
+
   function loop() {
     rx += (mx - rx) * 0.18;
     ry += (my - ry) * 0.18;
@@ -1595,13 +1782,13 @@
     requestAnimationFrame(loop);
   }
   loop();
- 
+
   document.querySelectorAll('[data-hover], a, button').forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('hover'));
     el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
   });
 })();
- 
+
 /* =========================================================
    2. SCROLL PROGRESS
    ========================================================= */
@@ -1615,7 +1802,7 @@
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 })();
- 
+
 /* =========================================================
    3. STOCK TICKER
    ========================================================= */
@@ -1643,7 +1830,7 @@
     </span>`).join('');
   document.getElementById('tickerTrack').innerHTML = html + html; // duplicate for seamless loop
 })();
- 
+
 /* =========================================================
    4. WORLD CLOCKS
    ========================================================= */
@@ -1661,7 +1848,7 @@
         timeZone: t.tz, hour12: false
       }).format(now);
       document.getElementById(t.id).textContent = time;
- 
+
       const localHourStr = new Intl.DateTimeFormat('en-GB', {
         hour: '2-digit', minute: '2-digit', timeZone: t.tz, hour12: false
       }).format(now);
@@ -1679,7 +1866,7 @@
   update();
   setInterval(update, 1000);
 })();
- 
+
 /* =========================================================
    5. CANDLESTICK CHART (animated random walk)
    ========================================================= */
@@ -1690,7 +1877,7 @@
   const candleW = W / COUNT - 2;
   let price = 70;
   const candles = [];
- 
+
   for (let i = 0; i < COUNT; i++) {
     const change = (Math.random() - 0.45) * 6;
     const open = price;
@@ -1700,9 +1887,9 @@
     const low = Math.min(open, close) - Math.random() * 4;
     candles.push({ open, close, high, low });
   }
- 
+
   function priceToY(p) { return H - ((p - 10) / 120) * H; }
- 
+
   function render() {
     g.innerHTML = '';
     candles.forEach((c, i) => {
@@ -1714,31 +1901,31 @@
       const yClose = priceToY(c.close);
       const bodyTop = Math.min(yOpen, yClose);
       const bodyH = Math.max(2, Math.abs(yClose - yOpen));
- 
+
       const grp = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       grp.setAttribute('class', 'candle ' + (isUp ? 'up' : 'down'));
- 
+
       const wick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
       wick.setAttribute('class', 'wick');
       wick.setAttribute('x1', x + candleW / 2);
       wick.setAttribute('x2', x + candleW / 2);
       wick.setAttribute('y1', yHigh);
       wick.setAttribute('y2', yLow);
- 
+
       const body = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       body.setAttribute('x', x);
       body.setAttribute('y', bodyTop);
       body.setAttribute('width', candleW);
       body.setAttribute('height', bodyH);
       body.setAttribute('rx', 1);
- 
+
       grp.appendChild(wick);
       grp.appendChild(body);
       g.appendChild(grp);
     });
   }
   render();
- 
+
   // Slow live update — shift left, append new
   setInterval(() => {
     const last = candles[candles.length - 1].close;
@@ -1752,7 +1939,7 @@
     render();
   }, 2200);
 })();
- 
+
 /* =========================================================
    6. INTERSECTION OBSERVER REVEALS
    ========================================================= */
@@ -1764,10 +1951,10 @@
       }
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
- 
+
   document.querySelectorAll('.reveal, .tl-item').forEach(el => io.observe(el));
 })();
- 
+
 /* =========================================================
    7. STAT COUNTERS
    ========================================================= */
@@ -1794,7 +1981,7 @@
   }, { threshold: 0.4 });
   stats.forEach(s => io.observe(s));
 })();
- 
+
 /* =========================================================
    8. SKILL BAR FILL
    ========================================================= */
@@ -1811,7 +1998,7 @@
   }, { threshold: 0.4 });
   bars.forEach(b => io.observe(b));
 })();
- 
+
 /* =========================================================
    9. PROJECT FILTERS
    ========================================================= */
@@ -1830,7 +2017,128 @@
     });
   });
 })();
+
+/* =========================================================
+   10. LIVE DASHBOARD BACKGROUND
+   - Side number streams
+   - 6 floating market panels: live ticks + parallax
+   - Scroll-driven trajectory line ("career chart")
+   ========================================================= */
+(() => {
+  // ── 10a. Side streams ──────────────────────────────────
+  const tokens = ['BUY','SELL','HOLD','EBITDA','DCF','WACC','NPV','IRR','BPS','P/E','P/B','EV','FCF','ROE','ROIC','EPS','CAPEX','OPEX','M&A','LTM','NTM','YoY','QoQ','▲','▼'];
+  function buildStream(count) {
+    let h = '';
+    for (let i = 0; i < count; i++) {
+      const t = tokens[Math.floor(Math.random() * tokens.length)];
+      const n = (Math.random() * 999).toFixed(2);
+      h += `<span><b>${t}</b><br>${n}</span>`;
+    }
+    return h + h; // duplicated for seamless loop
+  }
+  const sL = document.getElementById('streamL');
+  const sR = document.getElementById('streamR');
+  if (sL) sL.innerHTML = buildStream(14);
+  if (sR) sR.innerHTML = buildStream(16);
+
+  // ── 10b. Market panels ─────────────────────────────────
+  const panels = [
+    { id: 'bgP1', price: 8245.6,  vol: 0.003, dec: 1 },
+    { id: 'bgP2', price: 5847.3,  vol: 0.0035, dec: 1 },
+    { id: 'bgP3', price: 42150,   vol: 0.0028, dec: 0 },
+    { id: 'bgP4', price: 18632,   vol: 0.004, dec: 0 },
+    { id: 'bgP5', price: 1.2945,  vol: 0.002, dec: 4 },
+    { id: 'bgP6', price: 78.45,   vol: 0.0045, dec: 2 },
+  ];
+
+  // Seed each panel with a 12-point chart history
+  panels.forEach(p => {
+    p.history = [];
+    let v = p.price;
+    for (let i = 0; i < 14; i++) {
+      v += (Math.random() - 0.5) * p.price * p.vol;
+      p.history.push(v);
+    }
+    p.opening = p.history[0];
+  });
+
+  function fmt(n, dec) {
+    return n.toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+
+  function chartPoints(arr, w, h) {
+    const min = Math.min(...arr), max = Math.max(...arr);
+    const range = max - min || 1;
+    return arr.map((v, i) => {
+      const x = (i / (arr.length - 1)) * w;
+      const y = h - ((v - min) / range) * (h - 4) - 2;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(' ');
+  }
+
+  function render(p) {
+    const el = document.getElementById(p.id);
+    if (!el) return;
+    const priceEl = el.querySelector('.bg-panel__price');
+    const chgEl   = el.querySelector('.bg-panel__chg');
+    const polyEl  = el.querySelector('polyline');
+
+    priceEl.textContent = fmt(p.price, p.dec);
+    const pct = ((p.price - p.opening) / p.opening) * 100;
+    const dir = pct >= 0 ? 'up' : 'down';
+    chgEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+    chgEl.className = 'bg-panel__chg ' + dir;
+
+    polyEl.setAttribute('points', chartPoints(p.history, 100, 28));
+    polyEl.setAttribute('stroke', dir === 'up' ? '#4ade80' : '#f87171');
+  }
+  panels.forEach(render);
+
+  // Live tick — staggered so panels don't all flash at once
+  panels.forEach((p, i) => {
+    setTimeout(() => {
+      setInterval(() => {
+        const change = (Math.random() - 0.48) * p.price * p.vol;
+        p.price += change;
+        p.history.shift();
+        p.history.push(p.price);
+        render(p);
+      }, 1600 + Math.random() * 1200);
+    }, i * 280);
+  });
+
+  // ── 10c. Scroll parallax for panels + trajectory line ──
+  const speeds = [0.18, -0.12, 0.22, -0.16, 0.14, -0.20];
+  const trajPath = document.getElementById('trajPath');
+  let ticking = false;
+
+  function onScroll() {
+    const sc = window.scrollY;
+    const docH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const progress = docH > 0 ? Math.min(1, Math.max(0, sc / docH)) : 0;
+
+    panels.forEach((p, i) => {
+      const el = document.getElementById(p.id);
+      if (el) el.style.transform = `translate3d(0, ${(sc * speeds[i]).toFixed(1)}px, 0)`;
+    });
+
+    if (trajPath) {
+      // Eased progress so the line "settles" near the end
+      const eased = 1 - Math.pow(1 - progress, 1.4);
+      trajPath.setAttribute('stroke-dasharray', `${eased.toFixed(4)} 1`);
+    }
+
+    ticking = false;
+  }
+
+  document.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(onScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+  onScroll();
+})();
 </script>
 </body>
 </html>
- 
