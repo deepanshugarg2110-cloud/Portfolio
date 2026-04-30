@@ -871,19 +871,18 @@
  
   /* ---------- CONTACT ---------- */
   .contact { padding-bottom: 60px; }
-  .contact__grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 80px;
-    align-items: start;
+  .contact__center {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
   }
-  @media (max-width: 900px) { .contact__grid { grid-template-columns: 1fr; gap: 40px; } }
+  .contact__center .eyebrow { justify-content: center; }
   .contact__intro {
     font-size: 19px;
     color: var(--ink-muted);
     line-height: 1.7;
-    margin-bottom: 32px;
-    max-width: 460px;
+    margin: 0 auto 40px;
+    max-width: 520px;
   }
   .contact__channels { display: flex; flex-direction: column; gap: 20px; }
   .channel {
@@ -1539,50 +1538,32 @@
 <!-- CONTACT -->
 <section id="contact" class="contact">
   <div class="wrap">
-    <div class="contact__grid">
-      <div>
-        <div class="reveal">
-          <div class="eyebrow">Let's connect</div>
-          <h2 class="section-title">Get in <em>touch</em>.</h2>
-        </div>
-        <p class="contact__intro reveal reveal-delay-1">
-          I am open to graduate, internship, and analyst opportunities across the UK financial sector. Drop a message — I will respond promptly.
-        </p>
-        <div class="contact__channels reveal reveal-delay-2">
-          <a href="mailto:deepanshugarg2110@gmail.com" class="channel" data-hover>
-            <span class="channel__lbl">Email</span>
-            <span class="channel__val">deepanshugarg2110@gmail.com →</span>
-          </a>
-          <a href="tel:+447352667286" class="channel" data-hover>
-            <span class="channel__lbl">Phone</span>
-            <span class="channel__val">+44 7352 667 286 →</span>
-          </a>
-          <a href="https://www.linkedin.com/in/deepanshu-garg-224449252/" target="_blank" rel="noopener" class="channel" data-hover>
-            <span class="channel__lbl">LinkedIn</span>
-            <span class="channel__val">/in/deepanshu-garg →</span>
-          </a>
-          <div class="channel">
-            <span class="channel__lbl">Languages · Interests</span>
-            <span class="channel__val" style="font-size:14px; font-family:var(--mono); color:var(--ink-muted)">EN · HI · Investing · Yoga</span>
-          </div>
+    <div class="contact__center">
+      <div class="reveal">
+        <div class="eyebrow">Let's connect</div>
+        <h2 class="section-title">Get in <em>touch</em>.</h2>
+      </div>
+      <p class="contact__intro reveal reveal-delay-1">
+        I am open to graduate, internship, and analyst opportunities across the UK financial sector. The fastest way to reach me is below — I respond promptly.
+      </p>
+      <div class="contact__channels reveal reveal-delay-2">
+        <a href="mailto:deepanshugarg2110@gmail.com" class="channel" data-hover>
+          <span class="channel__lbl">Email</span>
+          <span class="channel__val">deepanshugarg2110@gmail.com →</span>
+        </a>
+        <a href="tel:+447352667286" class="channel" data-hover>
+          <span class="channel__lbl">Phone</span>
+          <span class="channel__val">+44 7352 667 286 →</span>
+        </a>
+        <a href="https://www.linkedin.com/in/deepanshu-garg-224449252/" target="_blank" rel="noopener" class="channel" data-hover>
+          <span class="channel__lbl">LinkedIn</span>
+          <span class="channel__val">/in/deepanshu-garg →</span>
+        </a>
+        <div class="channel">
+          <span class="channel__lbl">Languages · Interests</span>
+          <span class="channel__val" style="font-size:14px; font-family:var(--mono); color:var(--ink-muted)">EN · HI · Investing · Yoga</span>
         </div>
       </div>
- 
-      <form class="form reveal reveal-delay-1" id="contactForm">
-        <div class="form__field">
-          <label class="form__label" for="name">Name</label>
-          <input class="form__input" type="text" id="name" name="name" required />
-        </div>
-        <div class="form__field">
-          <label class="form__label" for="email">Email</label>
-          <input class="form__input" type="email" id="email" name="email" required />
-        </div>
-        <div class="form__field">
-          <label class="form__label" for="message">Message</label>
-          <textarea class="form__textarea" id="message" name="message" required></textarea>
-        </div>
-        <button type="submit" class="form__submit" data-hover>Send Message →</button>
-      </form>
     </div>
   </div>
 </section>
@@ -1590,8 +1571,6 @@
 <footer>
   © 2026 Deepanshu Garg · All rights reserved · Built with care
 </footer>
- 
-<div class="toast" id="toast">✉ Email client opening — message ready to send</div>
  
 <script>
 /* =========================================================
@@ -1849,25 +1828,6 @@
         p.classList.toggle('hidden', !match);
       });
     });
-  });
-})();
- 
-/* =========================================================
-   10. CONTACT FORM (mailto handoff + toast)
-   ========================================================= */
-(() => {
-  const form = document.getElementById('contactForm');
-  const toast = document.getElementById('toast');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = encodeURIComponent(document.getElementById('name').value);
-    const email = encodeURIComponent(document.getElementById('email').value);
-    const message = encodeURIComponent(document.getElementById('message').value);
-    const subject = `Portfolio enquiry from ${decodeURIComponent(name)}`;
-    const body = `From: ${decodeURIComponent(name)} (${decodeURIComponent(email)})%0D%0A%0D%0A${message}`;
-    window.location.href = `mailto:deepanshugarg2110@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3500);
   });
 })();
 </script>
