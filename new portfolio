@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Deepanshu Garg — Finance Professional</title>
+<meta name="description" content="Finance graduate · Translating complex financial data into clear, actionable narrative. Birmingham, UK." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600;1,9..144,700&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ---------- DESIGN TOKENS ---------- */
+  :root {
+    --bg: #0a0e17;
+    --bg-2: #0f1424;
+    --surface: #141a2c;
+    --surface-2: #1a2138;
+    --line: rgba(244, 241, 232, 0.08);
+    --line-strong: rgba(244, 241, 232, 0.18);
+    --ink: #f4f1e8;
+    --ink-muted: #9aa3b8;
+    --ink-dim: #6b7390;
+    --gold: #d4a574;
+    --gold-bright: #f5c98a;
+    --green: #4ade80;
+    --red: #f87171;
+    --blue: #6c8eff;
+ 
+    --serif: "Fraunces", "Times New Roman", serif;
+    --sans: "Manrope", system-ui, sans-serif;
+    --mono: "JetBrains Mono", "Courier New", monospace;
+ 
+    --max: 1280px;
+    --gutter: clamp(20px, 4vw, 56px);
+  }
+ 
+  /* ---------- RESET ---------- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.5;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  @media (max-width: 900px) { body { cursor: auto; } }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  img, svg { display: block; max-width: 100%; }
+  ::selection { background: var(--gold); color: #0a0e17; }
+ 
+  /* ---------- BACKGROUND ATMOSPHERE ---------- */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 1000px 700px at 80% -10%, rgba(212, 165, 116, 0.10), transparent 60%),
+      radial-gradient(ellipse 800px 600px at -10% 30%, rgba(108, 142, 255, 0.06), transparent 60%),
+      radial-gradient(ellipse 600px 500px at 50% 100%, rgba(74, 222, 128, 0.04), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: overlay;
+  }
+ 
+  /* ---------- CUSTOM CURSOR ---------- */
+  .cursor-dot, .cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    transition: transform 0.15s ease;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+  .cursor-ring.hover {
+    width: 56px; height: 56px;
+    background: rgba(212, 165, 116, 0.08);
+  }
+  @media (max-width: 900px) { .cursor-dot, .cursor-ring { display: none; } }
+ 
+  /* ---------- SCROLL PROGRESS ---------- */
+  .scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    z-index: 9998;
+    box-shadow: 0 0 12px rgba(212, 165, 116, 0.6);
+  }
+ 
+  /* ---------- TICKER ---------- */
+  .ticker {
+    position: relative;
+    z-index: 5;
+    border-bottom: 1px solid var(--line);
+    background: rgba(10, 14, 23, 0.6);
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    padding: 10px 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  .ticker__track {
+    display: flex;
+    gap: 48px;
+    width: max-content;
+    animation: ticker 60s linear infinite;
+  }
+  .ticker__item { display: inline-flex; gap: 10px; align-items: center; white-space: nowrap; color: var(--ink-muted); }
+  .ticker__item .sym { color: var(--ink); font-weight: 500; }
+  .ticker__item .val { color: var(--ink); }
+  .ticker__item .chg.up { color: var(--green); }
+  .ticker__item .chg.down { color: var(--red); }
+  .ticker__item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-dim); }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+ 
+  /* ---------- NAV ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(16px);
+    background: rgba(10, 14, 23, 0.7);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav__inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 18px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .logo .dot { color: var(--gold); }
+  .logo .meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+  .nav__links {
+    display: flex;
+    gap: 28px;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .nav__links a {
+    color: var(--ink-muted);
+    transition: color 0.2s ease;
+    position: relative;
+  }
+  .nav__links a::after {
+    content: "";
+    position: absolute;
+    bottom: -4px; left: 0;
+    height: 1px;
+    width: 0;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav__links a:hover { color: var(--ink); }
+  .nav__links a:hover::after { width: 100%; }
+  @media (max-width: 800px) { .nav__links { display: none; } }
+ 
+  /* ---------- LAYOUT ---------- */
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 2; }
+  section { position: relative; padding: clamp(80px, 12vw, 140px) 0; z-index: 2; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+  h2.section-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 76px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  h2.section-title em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+ 
+  /* ---------- HERO ---------- */
+  .hero { padding: 80px 0 60px; min-height: 90vh; display: flex; align-items: center; }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 900px) { .hero__grid { grid-template-columns: 1fr; gap: 40px; } }
+  .hero__title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(56px, 10vw, 140px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin: 24px 0 32px;
+  }
+  .hero__title .word {
+    display: block;
+    overflow: hidden;
+  }
+  .hero__title .word span {
+    display: block;
+    transform: translateY(110%);
+    animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .hero__title .word:nth-child(2) span { animation-delay: 0.15s; }
+  .hero__title .word:nth-child(3) span { animation-delay: 0.3s; }
+  .hero__title em { font-style: italic; color: var(--gold); font-weight: 400; }
+  @keyframes rise { to { transform: translateY(0); } }
+ 
+  .hero__lede {
+    font-size: clamp(16px, 1.5vw, 19px);
+    color: var(--ink-muted);
+    max-width: 480px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fade-in 0.8s ease 0.6s forwards;
+  }
+  .hero__cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fade-in 0.8s ease 0.8s forwards;
+  }
+  @keyframes fade-in { to { opacity: 1; } }
+ 
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 28px;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: #0a0e17;
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: var(--gold-bright); transform: translateY(-2px); }
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn .arrow { transition: transform 0.3s ease; }
+  .btn:hover .arrow { transform: translateX(4px); }
+ 
+  /* ---------- HERO TERMINAL CARD ---------- */
+  .terminal {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow:
+      0 30px 60px -20px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(212, 165, 116, 0.04) inset;
+    opacity: 0;
+    animation: terminal-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+    position: relative;
+    overflow: hidden;
+  }
+  @keyframes terminal-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .terminal__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 16px;
+  }
+  .terminal__label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+  }
+  .terminal__label .live {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-right: 8px;
+    animation: pulse 1.5s ease infinite;
+    vertical-align: middle;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+  }
+ 
+  .clocks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .clock { padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+  .clock__city { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-dim); margin-bottom: 6px; }
+  .clock__time { font-family: var(--mono); font-size: 16px; font-weight: 500; color: var(--ink); }
+  .clock__status { font-family: var(--mono); font-size: 9px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .clock__status.open { color: var(--green); }
+  .clock__status.closed { color: var(--red); }
+ 
+  .chart-wrap {
+    height: 140px;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .chart-wrap svg { width: 100%; height: 100%; }
+  .chart-grid line { stroke: var(--line); stroke-dasharray: 2 4; }
+  .candle .wick { stroke: var(--ink-muted); stroke-width: 1; }
+  .candle.up rect { fill: var(--green); }
+  .candle.up .wick { stroke: var(--green); }
+  .candle.down rect { fill: var(--red); }
+  .candle.down .wick { stroke: var(--red); }
+ 
+  .terminal__rows { display: flex; flex-direction: column; gap: 8px; }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .row:last-child { border-bottom: none; }
+  .row__name { color: var(--ink-muted); letter-spacing: 0.05em; }
+  .row__val { color: var(--ink); font-weight: 500; }
+  .row__chg.up { color: var(--green); }
+  .row__chg.down { color: var(--red); }
+ 
+  /* ---------- STATS ---------- */
+  .stats { padding: 40px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .stats__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  @media (max-width: 800px) { .stats__grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    padding: 28px 24px;
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .stat:last-child { border-right: none; }
+  @media (max-width: 800px) {
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  }
+  .stat__num {
+    font-family: var(--serif);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+  }
+  .stat__num .suffix { font-size: 0.5em; color: var(--ink-muted); margin-left: 4px; }
+  .stat__label {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+ 
+  /* ---------- ABOUT ---------- */
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media (max-width: 900px) { .about__grid { grid-template-columns: 1fr; gap: 40px; } }
+  .about__text p {
+    font-size: 17px;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    margin-bottom: 20px;
+    max-width: 540px;
+  }
+  .about__text p strong { color: var(--ink); font-weight: 500; }
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .pill {
+    padding: 8px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+  }
+  .pill:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+ 
+  /* ---------- EXPERIENCE TIMELINE ---------- */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line-strong);
+  }
+  .tl-item { position: relative; padding: 0 0 60px; }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: -40px;
+    top: 8px;
+    width: 17px;
+    height: 17px;
+    border: 1px solid var(--gold);
+    background: var(--bg);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  .tl-item::after {
+    content: "";
+    position: absolute;
+    left: -36px;
+    top: 12px;
+    width: 9px;
+    height: 9px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .tl-item.in-view::after { opacity: 1; }
+  .tl-date {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+  .tl-role {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 400;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .tl-org {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+  .tl-list { list-style: none; padding: 0; }
+  .tl-list li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 10px;
+    color: var(--ink-muted);
+    line-height: 1.65;
+  }
+  .tl-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-family: var(--mono);
+  }
+ 
+  /* ---------- SKILLS ---------- */
+  .skills__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+  }
+  @media (max-width: 800px) { .skills__grid { grid-template-columns: 1fr; } }
+  .skill-card {
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.08), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .skill-card:hover { transform: translateY(-4px); border-color: rgba(212, 165, 116, 0.4); }
+  .skill-card:hover::before { opacity: 1; }
+  .skill-card__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .skill-card__num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    letter-spacing: 0.15em;
+  }
+  .skill-card__metric {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+  }
+  .skill-card h3 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .skill-card p {
+    color: var(--ink-muted);
+    font-size: 15px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .bar {
+    height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar__fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    border-radius: 2px;
+    transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+ 
+  /* ---------- PROJECTS ---------- */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 32px 0 40px;
+  }
+  .filter {
+    padding: 8px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    transition: all 0.3s ease;
+  }
+  .filter:hover { color: var(--ink); }
+  .filter.active { background: var(--gold); border-color: var(--gold); color: #0a0e17; font-weight: 600; }
+ 
+  .projects__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 1000px) { .projects__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .projects__grid { grid-template-columns: 1fr; } }
+ 
+  .project {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: none;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) { .project { cursor: pointer; } }
+  .project::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--gold), transparent 50%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .project:hover { transform: translateY(-6px); }
+  .project:hover::before { opacity: 1; }
+  .project__num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+  .project__title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .project__desc {
+    font-size: 14px;
+    color: var(--ink-muted);
+    line-height: 1.65;
+    margin-bottom: 24px;
+  }
+  .project__tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .project.hidden { display: none; }
+ 
+  /* ---------- EDUCATION ---------- */
+  .edu-list { display: flex; flex-direction: column; gap: 0; }
+  .edu-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    padding: 32px 0;
+    border-top: 1px solid var(--line);
+    transition: all 0.3s ease;
+  }
+  .edu-item:hover { padding-left: 12px; }
+  .edu-item:hover .edu__year { color: var(--gold); }
+  .edu-item:last-child { border-bottom: 1px solid var(--line); }
+  @media (max-width: 700px) { .edu-item { grid-template-columns: 1fr; gap: 12px; } }
+  .edu__year {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    padding-top: 4px;
+  }
+  .edu__degree {
+    font-family: var(--serif);
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 400;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .edu__degree em { font-style: italic; color: var(--gold); }
+  .edu__inst { font-family: var(--mono); font-size: 12px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+  .edu__note { color: var(--ink-muted); font-size: 15px; line-height: 1.65; max-width: 600px; }
+ 
+  /* ---------- CERTIFICATIONS ---------- */
+  .certs__intro {
+    font-size: 17px;
+    color: var(--ink-muted);
+    max-width: 580px;
+    line-height: 1.65;
+    margin-top: 12px;
+  }
+  .certs__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+  @media (max-width: 800px) { .certs__grid { grid-template-columns: 1fr; } }
+  .cert {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cert::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.55), transparent 55%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .cert::after {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(212, 165, 116, 0.10), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .cert:hover { transform: translateY(-6px); border-color: rgba(212, 165, 116, 0.25); }
+  .cert:hover::before { opacity: 1; }
+  .cert:hover::after { opacity: 1; }
+  .cert__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 2;
+  }
+  .cert__verified { color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
+  .cert__verified::before {
+    content: "";
+    width: 5px; height: 5px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+  }
+  .cert__mark {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(32px, 4.2vw, 48px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--gold);
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 2;
+  }
+  .cert__divider {
+    height: 1px;
+    width: 56px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin-bottom: 26px;
+  }
+  .cert__title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .cert__title em { font-style: italic; color: var(--ink-muted); font-weight: 300; }
+  .cert__desc {
+    font-size: 14px;
+    color: var(--ink-muted);
+    line-height: 1.65;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 2;
+  }
+  .cert__date {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .cert__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    position: relative;
+    z-index: 2;
+  }
+  .cert__pill {
+    padding: 6px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+    transition: all 0.3s ease;
+  }
+  .cert:hover .cert__pill { border-color: rgba(212, 165, 116, 0.3); color: var(--ink); }
+ 
+  /* ---------- CONTACT ---------- */
+  .contact { padding-bottom: 60px; }
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media (max-width: 900px) { .contact__grid { grid-template-columns: 1fr; gap: 40px; } }
+  .contact__intro {
+    font-size: 19px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 460px;
+  }
+  .contact__channels { display: flex; flex-direction: column; gap: 20px; }
+  .channel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+    transition: all 0.3s ease;
+    cursor: none;
+  }
+  @media (max-width: 900px) { .channel { cursor: pointer; } }
+  .channel:hover { padding-left: 8px; }
+  .channel:hover .channel__val { color: var(--gold); }
+  .channel:last-child { border-bottom: 1px solid var(--line); }
+  .channel__lbl { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.18em; }
+  .channel__val { font-family: var(--serif); font-size: 18px; transition: color 0.3s ease; }
+ 
+  .form {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .form__field { margin-bottom: 20px; }
+  .form__label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+  .form__input, .form__textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    color: var(--ink);
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 15px;
+    transition: all 0.3s ease;
+  }
+  .form__input:focus, .form__textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.12);
+  }
+  .form__textarea { min-height: 120px; resize: vertical; }
+  .form__submit {
+    width: 100%;
+    padding: 16px;
+    background: var(--gold);
+    color: #0a0e17;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  .form__submit:hover { background: var(--gold-bright); transform: translateY(-2px); }
+ 
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    position: relative;
+    z-index: 2;
+  }
+ 
+  /* ---------- REVEAL ANIMATIONS ---------- */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+ 
+  /* ---------- TOAST ---------- */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--gold);
+    color: #0a0e17;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 10px 40px rgba(212, 165, 116, 0.4);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+ 
+<!-- Custom cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+ 
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+ 
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track" id="tickerTrack">
+    <!-- populated by JS, duplicated for seamless loop -->
+  </div>
+</div>
+ 
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav__inner">
+    <a href="#hero" class="logo">
+      <span>Deepanshu Garg<span class="dot">.</span></span>
+      <span class="meta">Birmingham · UK</span>
+    </a>
+    <div class="nav__links">
+      <a href="#about" data-hover>About</a>
+      <a href="#experience" data-hover>Work</a>
+      <a href="#skills" data-hover>Skills</a>
+      <a href="#credentials" data-hover>Credentials</a>
+      <a href="#projects" data-hover>Projects</a>
+      <a href="#education" data-hover>Education</a>
+      <a href="#contact" data-hover>Contact</a>
+    </div>
+  </div>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <div class="eyebrow">Finance Professional</div>
+        <h1 class="hero__title">
+          <span class="word"><span>Where</span></span>
+          <span class="word"><span>data meets</span></span>
+          <span class="word"><span><em>decision.</em></span></span>
+        </h1>
+        <p class="hero__lede">
+          MSc Financial Management candidate at the University of Birmingham. I translate complex financial data into clear, actionable narrative — through reformulated statements, DCF valuations, and reporting systems that compress cycle times.
+        </p>
+        <div class="hero__cta">
+          <a href="#contact" class="btn btn-primary" data-hover>
+            Get in touch
+            <span class="arrow">→</span>
+          </a>
+          <a href="#projects" class="btn btn-ghost" data-hover>
+            View selected work
+            <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+ 
+      <div class="terminal" data-hover>
+        <div class="terminal__head">
+          <div class="terminal__label"><span class="live"></span>Analyst desk · Live</div>
+          <div class="terminal__label" id="sessionId">SES · DG-2026</div>
+        </div>
+ 
+        <div class="clocks">
+          <div class="clock">
+            <div class="clock__city">London</div>
+            <div class="clock__time" id="clockLDN">--:--:--</div>
+            <div class="clock__status" id="statusLDN">—</div>
+          </div>
+          <div class="clock">
+            <div class="clock__city">New York</div>
+            <div class="clock__time" id="clockNYC">--:--:--</div>
+            <div class="clock__status" id="statusNYC">—</div>
+          </div>
+          <div class="clock">
+            <div class="clock__city">Tokyo</div>
+            <div class="clock__time" id="clockTYO">--:--:--</div>
+            <div class="clock__status" id="statusTYO">—</div>
+          </div>
+        </div>
+ 
+        <div class="chart-wrap">
+          <svg viewBox="0 0 400 140" preserveAspectRatio="none" id="chartSvg">
+            <g class="chart-grid">
+              <line x1="0" y1="35" x2="400" y2="35" />
+              <line x1="0" y1="70" x2="400" y2="70" />
+              <line x1="0" y1="105" x2="400" y2="105" />
+            </g>
+            <g id="candles"></g>
+          </svg>
+        </div>
+ 
+        <div class="terminal__rows">
+          <div class="row">
+            <span class="row__name">REPORTING_CYCLE</span>
+            <span><span class="row__val">↓ 20%</span> &nbsp;<span class="row__chg up">+ALPHA</span></span>
+          </div>
+          <div class="row">
+            <span class="row__name">ERROR_RATE</span>
+            <span><span class="row__val">↓ 25%</span> &nbsp;<span class="row__chg up">+ALPHA</span></span>
+          </div>
+          <div class="row">
+            <span class="row__name">PROCESS_SPEED</span>
+            <span><span class="row__val">↑ 30%</span> &nbsp;<span class="row__chg up">+ALPHA</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- STATS -->
+<section class="stats">
+  <div class="wrap">
+    <div class="stats__grid">
+      <div class="stat">
+        <div class="stat__num" data-count="20"><span class="num">0</span><span class="suffix">%</span></div>
+        <div class="stat__label">Reporting cycle reduced</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num" data-count="25"><span class="num">0</span><span class="suffix">%</span></div>
+        <div class="stat__label">Error reduction delivered</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num" data-count="30"><span class="num">0</span><span class="suffix">%</span></div>
+        <div class="stat__label">Process speed gained</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num" data-count="100"><span class="num">0</span><span class="suffix">%</span></div>
+        <div class="stat__label">Day-end reconciliation accuracy</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="about__grid">
+      <div class="about__head reveal">
+        <div class="eyebrow">About</div>
+        <h2 class="section-title">A finance mind built for <em>precision</em>.</h2>
+      </div>
+      <div class="about__text reveal reveal-delay-1">
+        <p>
+          I am a Finance graduate with a keen eye for detail and a passion for turning <strong>complex data into clear, actionable insights</strong>. My experience spans financial research, end-to-end reporting, and building automated systems that compress reporting cycles and reduce error rates.
+        </p>
+        <p>
+          Now reading for an MSc in Financial Management at <strong>the University of Birmingham</strong>, with hands-on work in equity valuation, financial statement reformulation, and econometric modelling. Open to opportunities across the UK financial sector.
+        </p>
+        <div class="pills">
+          <span class="pill" data-hover>MS Excel</span>
+          <span class="pill" data-hover>DCF Modelling</span>
+          <span class="pill" data-hover>Tally</span>
+          <span class="pill" data-hover>Stata</span>
+          <span class="pill" data-hover>Financial Reporting</span>
+          <span class="pill" data-hover>Budgeting</span>
+          <span class="pill" data-hover>Equity Valuation</span>
+          <span class="pill" data-hover>Google Workspace</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Career</div>
+      <h2 class="section-title">Professional <em>experience</em>.</h2>
+    </div>
+    <div class="timeline" style="margin-top: 60px;">
+ 
+      <div class="tl-item reveal">
+        <div class="tl-date">July – September 2024</div>
+        <div class="tl-role">Finance Intern</div>
+        <div class="tl-org">Agile Capital Services</div>
+        <ul class="tl-list">
+          <li>Analysed financial data and identified discrepancies, resolving errors and strengthening reporting integrity.</li>
+          <li>Developed automated budgeting and forecasting models in Excel, cutting the reporting cycle by 20%.</li>
+          <li>Collaborated on a consultancy project, streamlining research and financial reporting workflows.</li>
+          <li>Assisted with preparation and review of financial statements, ensuring accuracy and compliance.</li>
+          <li>Communicated recommendations to management, leading to adoption of new reporting standards.</li>
+        </ul>
+      </div>
+ 
+      <div class="tl-item reveal">
+        <div class="tl-date">2021 – 2025</div>
+        <div class="tl-role">Retail Accountant</div>
+        <div class="tl-org">SKM Retail Store</div>
+        <ul class="tl-list">
+          <li>Managed retail accounting — prepared and recorded purchase/sale bills and maintained daily accounts.</li>
+          <li>Reconciled all cash, card, and digital payments, ensuring 100% accuracy in day-end reports.</li>
+          <li>Implemented digital payment reconciliation, reducing errors by 25% and enabling fast year-end close.</li>
+          <li>Coordinated with suppliers and the sales team to reduce stock losses by 15%.</li>
+          <li>Tracked and analysed monthly expenses, identifying cost savings that improved profit margins.</li>
+          <li>Trained new staff in accounting systems and inventory protocols.</li>
+        </ul>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Capabilities</div>
+      <h2 class="section-title">Core <em>skills</em>.</h2>
+    </div>
+    <div class="skills__grid">
+      <div class="skill-card reveal" data-hover>
+        <div class="skill-card__head">
+          <span class="skill-card__num">01 / 06</span>
+          <span class="skill-card__metric">— Lead</span>
+        </div>
+        <h3>Financial Analysis</h3>
+        <p>Budgeting, investment research, forecasting models, and comprehensive financial reporting delivered with precision.</p>
+        <div class="bar"><div class="bar__fill" data-fill="95"></div></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-1" data-hover>
+        <div class="skill-card__head">
+          <span class="skill-card__num">02 / 06</span>
+          <span class="skill-card__metric">— Lead</span>
+        </div>
+        <h3>Accounting &amp; Reporting</h3>
+        <p>End-to-end management of purchase/sales bills, transaction reconciliation, and automated end-of-day financial reporting.</p>
+        <div class="bar"><div class="bar__fill" data-fill="92"></div></div>
+      </div>
+ 
+      <div class="skill-card reveal" data-hover>
+        <div class="skill-card__head">
+          <span class="skill-card__num">03 / 06</span>
+          <span class="skill-card__metric">— Lead</span>
+        </div>
+        <h3>MS Excel &amp; Tools</h3>
+        <p>Advanced Excel including automated DCF and forecasting models. Fluent in Google Workspace, PowerPoint, Tally, and basic ERP packages.</p>
+        <div class="bar"><div class="bar__fill" data-fill="98"></div></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-1" data-hover>
+        <div class="skill-card__head">
+          <span class="skill-card__num">04 / 06</span>
+          <span class="skill-card__metric">— Strong</span>
+        </div>
+        <h3>Process Automation</h3>
+        <p>Designed and deployed automated record-keeping and reconciliation systems, measurably improving speed and accuracy.</p>
+        <div class="bar"><div class="bar__fill" data-fill="88"></div></div>
+      </div>
+ 
+      <div class="skill-card reveal" data-hover>
+        <div class="skill-card__head">
+          <span class="skill-card__num">05 / 06</span>
+          <span class="skill-card__metric">— Strong</span>
+        </div>
+        <h3>Project Management</h3>
+        <p>Led cross-functional projects from planning through delivery — inventory coordination, training programmes, and workshops.</p>
+        <div class="bar"><div class="bar__fill" data-fill="85"></div></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-1" data-hover>
+        <div class="skill-card__head">
+          <span class="skill-card__num">06 / 06</span>
+          <span class="skill-card__metric">— Strong</span>
+        </div>
+        <h3>Teamwork &amp; Communication</h3>
+        <p>Track record of training staff, presenting to management, and thriving in collaborative, deadline-driven environments.</p>
+        <div class="bar"><div class="bar__fill" data-fill="90"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CERTIFICATIONS -->
+<section id="credentials">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Credentials</div>
+      <h2 class="section-title">Certifications &amp; <em>simulations</em>.</h2>
+      <p class="certs__intro">
+        Hands-on virtual experience programmes from leading investment banks and Big Four firms — completed on Forage with verified credentials, each delivering measurable analytical output.
+      </p>
+    </div>
+ 
+    <div class="certs__grid">
+ 
+      <article class="cert reveal" data-hover>
+        <div class="cert__head">
+          <span>Credential — 01 / 06</span>
+          <span class="cert__verified">Verified · Forage</span>
+        </div>
+        <div class="cert__mark">J.P. Morgan</div>
+        <div class="cert__divider"></div>
+        <h3 class="cert__title">Investment Banking <em>Job Simulation</em></h3>
+        <p class="cert__desc">Selected M&amp;A acquisition targets via strategic screening, built a full DCF with sensitivity analysis on the WorldWide Brewing / Happy Hour Co transaction, and delivered a structured investment recommendation reflecting fire-disruption and competitive bid dynamics.</p>
+        <div class="cert__date">April 2026</div>
+        <div class="cert__pills">
+          <span class="cert__pill">M&amp;A</span>
+          <span class="cert__pill">DCF</span>
+          <span class="cert__pill">Sensitivity</span>
+          <span class="cert__pill">Recommendation</span>
+        </div>
+      </article>
+ 
+      <article class="cert reveal reveal-delay-1" data-hover>
+        <div class="cert__head">
+          <span>Credential — 02 / 06</span>
+          <span class="cert__verified">Verified · Forage</span>
+        </div>
+        <div class="cert__mark">Bank of America</div>
+        <div class="cert__divider"></div>
+        <h3 class="cert__title">Investment Banking — <em>TMT Coverage</em></h3>
+        <p class="cert__desc">Junior analyst on the Technology, Telecom &amp; Media team advising Webflix. Drafted SWOT, built a financial summary from a 10-K, screened M&amp;A targets against four strategic criteria, and delivered a 5-year DCF on Nintendo (implied share price <strong style="color:var(--ink)">$78.13</strong>; TEV ~$68.9bn).</p>
+        <div class="cert__date">April 2026</div>
+        <div class="cert__pills">
+          <span class="cert__pill">SWOT</span>
+          <span class="cert__pill">10-K Analysis</span>
+          <span class="cert__pill">M&amp;A Screening</span>
+          <span class="cert__pill">DCF</span>
+        </div>
+      </article>
+ 
+      <article class="cert reveal" data-hover>
+        <div class="cert__head">
+          <span>Credential — 03 / 06</span>
+          <span class="cert__verified">Verified · Forage</span>
+        </div>
+        <div class="cert__mark">Bank of America</div>
+        <div class="cert__divider"></div>
+        <h3 class="cert__title">Investment Banking — <em>Part II</em></h3>
+        <p class="cert__desc">Industry deep-dive and senior client outreach. Authored a Managing Director voicemail script targeting a gaming-sector executive, conducted MICI analysis on the gaming &amp; entertainment landscape, and shaped the long-term client relationship plan.</p>
+        <div class="cert__date">April 2026</div>
+        <div class="cert__pills">
+          <span class="cert__pill">MICI Analysis</span>
+          <span class="cert__pill">Industry Research</span>
+          <span class="cert__pill">Client Communication</span>
+          <span class="cert__pill">Relationship Mgmt</span>
+        </div>
+      </article>
+ 
+      <article class="cert reveal reveal-delay-1" data-hover>
+        <div class="cert__head">
+          <span>Credential — 04 / 06</span>
+          <span class="cert__verified">Verified · Forage</span>
+        </div>
+        <div class="cert__mark">KPMG</div>
+        <div class="cert__divider"></div>
+        <h3 class="cert__title">Audit <em>Job Simulation</em></h3>
+        <p class="cert__desc">Reviewed trial balance across 3 locations and escalated 2 sites — Glasgow (<strong style="color:var(--ink)">+34.9%</strong>) and Bristol (<strong style="color:var(--ink)">+15.3%</strong>) — for substantive testing. Identified a £600K+ revenue discrepancy linked to management bonus incentives and flagged as high-risk under UK GAAP audit assertions.</p>
+        <div class="cert__date">April 2026 · ID 693239a57821e5875f0eada6</div>
+        <div class="cert__pills">
+          <span class="cert__pill">Audit Planning</span>
+          <span class="cert__pill">Risk Assessment</span>
+          <span class="cert__pill">UK GAAP</span>
+          <span class="cert__pill">Analytical Testing</span>
+        </div>
+      </article>
+ 
+      <article class="cert reveal" data-hover>
+        <div class="cert__head">
+          <span>Credential — 05 / 06</span>
+          <span class="cert__verified">Verified · Forage</span>
+        </div>
+        <div class="cert__mark">Citi</div>
+        <div class="cert__divider"></div>
+        <h3 class="cert__title">Investment Banking <em>Job Simulation</em></h3>
+        <p class="cert__desc">Built a 5-year income statement forecast and spread trading comps across 8 publicly listed retailers (EV/Revenue, EV/EBITDA). Constructed a full M&amp;A target company profile — enterprise value build, financial metrics, and leadership analysis — for a big-box retail acquisition.</p>
+        <div class="cert__date">January – April 2026</div>
+        <div class="cert__pills">
+          <span class="cert__pill">M&amp;A Profiling</span>
+          <span class="cert__pill">Trading Comps</span>
+          <span class="cert__pill">Forecasting</span>
+          <span class="cert__pill">EV/EBITDA</span>
+        </div>
+      </article>
+ 
+      <article class="cert reveal reveal-delay-1" data-hover>
+        <div class="cert__head">
+          <span>Credential — 06 / 06</span>
+          <span class="cert__verified">Verified · Forage</span>
+        </div>
+        <div class="cert__mark">Fidelity Intl.</div>
+        <div class="cert__divider"></div>
+        <h3 class="cert__title">Investment Management <em>Job Simulation</em></h3>
+        <p class="cert__desc">Optimised an 8-fund portfolio using Sharpe Ratio and Excel Solver — achieved <strong style="color:var(--ink)">Sharpe 1.73</strong> vs 0.98 for the S&amp;P 500. Optimal allocation (Select Dividend 49%, Special Situations 29%, Mid Cap 21%) delivered <strong style="color:var(--ink)">14.1% expected return</strong> at only 7.2% volatility.</p>
+        <div class="cert__date">April 2026</div>
+        <div class="cert__pills">
+          <span class="cert__pill">Portfolio Optimisation</span>
+          <span class="cert__pill">Sharpe Ratio</span>
+          <span class="cert__pill">Excel Solver</span>
+          <span class="cert__pill">Fixed Income</span>
+        </div>
+      </article>
+ 
+    </div>
+  </div>
+</section>
+ 
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Selected Work</div>
+      <h2 class="section-title">Key <em>projects</em>.</h2>
+    </div>
+ 
+    <div class="filters reveal" id="filters">
+      <button class="filter active" data-filter="all" data-hover>All</button>
+      <button class="filter" data-filter="Valuation" data-hover>Valuation</button>
+      <button class="filter" data-filter="Corporate Finance" data-hover>Corporate Finance</button>
+      <button class="filter" data-filter="Econometrics" data-hover>Econometrics</button>
+      <button class="filter" data-filter="Operations" data-hover>Operations</button>
+      <button class="filter" data-filter="Research" data-hover>Research</button>
+      <button class="filter" data-filter="Trading" data-hover>Trading</button>
+      <button class="filter" data-filter="Training" data-hover>Training</button>
+    </div>
+ 
+    <div class="projects__grid" id="projectsGrid">
+ 
+      <article class="project reveal" data-tag="Valuation" data-hover>
+        <div class="project__num">PROJECT — 09</div>
+        <h3 class="project__title">Equity Valuation Report — Imperial Brands PLC</h3>
+        <p class="project__desc">Comprehensive equity valuation using 25 years of historical data. Applied DCF, dividend discount, and comparable multiples; cross-referenced reformulated statements; delivered fair-value assessment with sensitivity analysis and investment recommendation.</p>
+        <span class="project__tag">Valuation</span>
+      </article>
+ 
+      <article class="project reveal reveal-delay-1" data-tag="Corporate Finance" data-hover>
+        <div class="project__num">PROJECT — 07</div>
+        <h3 class="project__title">Statement Reformulation — Imperial Brands PLC</h3>
+        <p class="project__desc">Standardised disclosures, isolated core earnings, and prepared restated figures as the foundation for the subsequent equity valuation report. Mirrored the framework applied to BAT.</p>
+        <span class="project__tag">Corporate Finance</span>
+      </article>
+ 
+      <article class="project reveal reveal-delay-2" data-tag="Corporate Finance" data-hover>
+        <div class="project__num">PROJECT — 06</div>
+        <h3 class="project__title">Statement Reformulation — British American Tobacco PLC</h3>
+        <p class="project__desc">Reclassified line items to separate operating from non-operating activities. Rebuilt the balance sheet into invested-capital format and recalculated key profitability and return metrics for cleaner comparative analysis.</p>
+        <span class="project__tag">Corporate Finance</span>
+      </article>
+ 
+      <article class="project reveal" data-tag="Econometrics" data-hover>
+        <div class="project__num">PROJECT — 08</div>
+        <h3 class="project__title">UK Inflation Drivers, 2000–2025</h3>
+        <p class="project__desc">Built a quantitative model in Stata identifying short-run drivers of UK inflation across 25 years. Incorporated exchange rates, energy prices, and monetary policy shifts; produced trend visualisations and regression diagnostics.</p>
+        <span class="project__tag">Econometrics</span>
+      </article>
+ 
+      <article class="project reveal reveal-delay-1" data-tag="Operations" data-hover>
+        <div class="project__num">PROJECT — 01</div>
+        <h3 class="project__title">Automated Record-Keeping System</h3>
+        <p class="project__desc">Led the rollout of a fully automated record-keeping system that improved overall process speed by 30%, reducing manual effort and human error across daily operations.</p>
+        <span class="project__tag">Operations</span>
+      </article>
+ 
+      <article class="project reveal reveal-delay-2" data-tag="Trading" data-hover>
+        <div class="project__num">PROJECT — 04</div>
+        <h3 class="project__title">Algorithmic Trading Strategies</h3>
+        <p class="project__desc">Developed and back-tested algorithmic trading strategies, growing virtual portfolio value through disciplined data-driven analysis and risk-adjusted entry/exit rules.</p>
+        <span class="project__tag">Trading</span>
+      </article>
+ 
+      <article class="project reveal" data-tag="Research" data-hover>
+        <div class="project__num">PROJECT — 02</div>
+        <h3 class="project__title">Patanjali — Marketing Strategy Research</h3>
+        <p class="project__desc">Comprehensive research project analysing Patanjali's marketing strategy across pricing, positioning, and distribution; presented actionable growth recommendations.</p>
+        <span class="project__tag">Research</span>
+      </article>
+ 
+      <article class="project reveal reveal-delay-1" data-tag="Research" data-hover>
+        <div class="project__num">PROJECT — 03</div>
+        <h3 class="project__title">Consultant-Sector Finance — Internship Report</h3>
+        <p class="project__desc">In-depth report analysing best practices in consultant-sector finance. Recommendations were adopted by the team to improve workflow efficiency.</p>
+        <span class="project__tag">Research</span>
+      </article>
+ 
+      <article class="project reveal reveal-delay-2" data-tag="Training" data-hover>
+        <div class="project__num">PROJECT — 05</div>
+        <h3 class="project__title">Finance Workshops &amp; Training</h3>
+        <p class="project__desc">Designed and delivered finance workshops for new hires across academic and workplace settings, building capability and streamlining onboarding.</p>
+        <span class="project__tag">Training</span>
+      </article>
+ 
+    </div>
+  </div>
+</section>
+ 
+<!-- EDUCATION -->
+<section id="education">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Background</div>
+      <h2 class="section-title">Education &amp; <em>foundations</em>.</h2>
+    </div>
+    <div class="edu-list" style="margin-top: 60px;">
+ 
+      <div class="edu-item reveal">
+        <div class="edu__year">2025 — Present</div>
+        <div>
+          <div class="edu__degree">MSc <em>Financial Management</em></div>
+          <div class="edu__inst">University of Birmingham</div>
+          <div class="edu__note">Currently deepening expertise in corporate finance, investment analysis, and strategic financial decision-making.</div>
+        </div>
+      </div>
+ 
+      <div class="edu-item reveal">
+        <div class="edu__year">2022 — 2025</div>
+        <div>
+          <div class="edu__degree">BBA <em>(Finance)</em></div>
+          <div class="edu__inst">New Delhi Institute of Management, GGSIPU</div>
+          <div class="edu__note">Specialised in financial analysis, budgeting, and reporting. Graduated with strong academic standing.</div>
+        </div>
+      </div>
+ 
+      <div class="edu-item reveal">
+        <div class="edu__year">2020 — 2022</div>
+        <div>
+          <div class="edu__degree">Senior Secondary — CBSE</div>
+          <div class="edu__inst">Arwachin Bharti Bhawan Sr. Secondary School</div>
+          <div class="edu__note">82% — strong foundation in commerce and mathematics.</div>
+        </div>
+      </div>
+ 
+      <div class="edu-item reveal">
+        <div class="edu__year">2018 — 2020</div>
+        <div>
+          <div class="edu__degree">Secondary — CBSE</div>
+          <div class="edu__inst">Arwachin Bharti Bhawan Sr. Secondary School</div>
+          <div class="edu__note">82% — Gold Medal, CBSE Cluster Handball. Demonstrated leadership and discipline.</div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="contact__grid">
+      <div>
+        <div class="reveal">
+          <div class="eyebrow">Let's connect</div>
+          <h2 class="section-title">Get in <em>touch</em>.</h2>
+        </div>
+        <p class="contact__intro reveal reveal-delay-1">
+          I am open to graduate, internship, and analyst opportunities across the UK financial sector. Drop a message — I will respond promptly.
+        </p>
+        <div class="contact__channels reveal reveal-delay-2">
+          <a href="mailto:deepanshugarg2110@gmail.com" class="channel" data-hover>
+            <span class="channel__lbl">Email</span>
+            <span class="channel__val">deepanshugarg2110@gmail.com →</span>
+          </a>
+          <a href="tel:+447352667286" class="channel" data-hover>
+            <span class="channel__lbl">Phone</span>
+            <span class="channel__val">+44 7352 667 286 →</span>
+          </a>
+          <a href="https://www.linkedin.com/in/deepanshu-garg-224449252/" target="_blank" rel="noopener" class="channel" data-hover>
+            <span class="channel__lbl">LinkedIn</span>
+            <span class="channel__val">/in/deepanshu-garg →</span>
+          </a>
+          <div class="channel">
+            <span class="channel__lbl">Languages · Interests</span>
+            <span class="channel__val" style="font-size:14px; font-family:var(--mono); color:var(--ink-muted)">EN · HI · Investing · Yoga</span>
+          </div>
+        </div>
+      </div>
+ 
+      <form class="form reveal reveal-delay-1" id="contactForm">
+        <div class="form__field">
+          <label class="form__label" for="name">Name</label>
+          <input class="form__input" type="text" id="name" name="name" required />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="email">Email</label>
+          <input class="form__input" type="email" id="email" name="email" required />
+        </div>
+        <div class="form__field">
+          <label class="form__label" for="message">Message</label>
+          <textarea class="form__textarea" id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="form__submit" data-hover>Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+ 
+<footer>
+  © 2026 Deepanshu Garg · All rights reserved · Built with care
+</footer>
+ 
+<div class="toast" id="toast">✉ Email client opening — message ready to send</div>
+ 
+<script>
+/* =========================================================
+   1. CUSTOM CURSOR
+   ========================================================= */
+(() => {
+  if (window.matchMedia('(max-width: 900px)').matches) return;
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  let rx = mx, ry = my;
+ 
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+  });
+ 
+  function loop() {
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+ 
+  document.querySelectorAll('[data-hover], a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
+})();
+ 
+/* =========================================================
+   2. SCROLL PROGRESS
+   ========================================================= */
+(() => {
+  const bar = document.getElementById('scrollProgress');
+  const onScroll = () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
+    bar.style.width = (scrolled * 100) + '%';
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+ 
+/* =========================================================
+   3. STOCK TICKER
+   ========================================================= */
+(() => {
+  const items = [
+    { sym: 'EXCEL', val: '98.5', chg: '+2.1%', dir: 'up' },
+    { sym: 'DCF', val: '95.0', chg: '+1.8%', dir: 'up' },
+    { sym: 'TALLY', val: '88.0', chg: '+0.4%', dir: 'up' },
+    { sym: 'STATA', val: '82.5', chg: '+3.2%', dir: 'up' },
+    { sym: 'REPORTING', val: '92.0', chg: '+1.1%', dir: 'up' },
+    { sym: 'BUDGETING', val: '90.0', chg: '+0.9%', dir: 'up' },
+    { sym: 'VALUATION', val: '94.5', chg: '+2.7%', dir: 'up' },
+    { sym: 'AUTOMATION', val: '88.5', chg: '+4.0%', dir: 'up' },
+    { sym: 'M&A', val: '86.0', chg: '+1.4%', dir: 'up' },
+    { sym: 'EQUITY_RES', val: '93.0', chg: '+2.0%', dir: 'up' },
+    { sym: 'PYTHON', val: '70.0', chg: '+5.0%', dir: 'up' },
+    { sym: 'POWERBI', val: '72.0', chg: '+3.5%', dir: 'up' },
+  ];
+  const html = items.map(i => `
+    <span class="ticker__item">
+      <span class="sym">${i.sym}</span>
+      <span class="val">${i.val}</span>
+      <span class="chg ${i.dir}">${i.chg}</span>
+      <span class="dot"></span>
+    </span>`).join('');
+  document.getElementById('tickerTrack').innerHTML = html + html; // duplicate for seamless loop
+})();
+ 
+/* =========================================================
+   4. WORLD CLOCKS
+   ========================================================= */
+(() => {
+  const targets = [
+    { id: 'clockLDN', tz: 'Europe/London',    statusId: 'statusLDN', open: 8,  close: 16.5 },
+    { id: 'clockNYC', tz: 'America/New_York', statusId: 'statusNYC', open: 9.5, close: 16 },
+    { id: 'clockTYO', tz: 'Asia/Tokyo',       statusId: 'statusTYO', open: 9,  close: 15 },
+  ];
+  function update() {
+    const now = new Date();
+    targets.forEach(t => {
+      const time = new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        timeZone: t.tz, hour12: false
+      }).format(now);
+      document.getElementById(t.id).textContent = time;
+ 
+      const localHourStr = new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit', minute: '2-digit', timeZone: t.tz, hour12: false
+      }).format(now);
+      const [h, m] = localHourStr.split(':').map(Number);
+      const decimal = h + m / 60;
+      const day = new Intl.DateTimeFormat('en-GB', { weekday: 'short', timeZone: t.tz }).format(now);
+      const isWeekend = day === 'Sat' || day === 'Sun';
+      const isOpen = !isWeekend && decimal >= t.open && decimal < t.close;
+      const el = document.getElementById(t.statusId);
+      el.textContent = isOpen ? '● Market open' : '○ Closed';
+      el.classList.toggle('open', isOpen);
+      el.classList.toggle('closed', !isOpen);
+    });
+  }
+  update();
+  setInterval(update, 1000);
+})();
+ 
+/* =========================================================
+   5. CANDLESTICK CHART (animated random walk)
+   ========================================================= */
+(() => {
+  const g = document.getElementById('candles');
+  const W = 400, H = 140;
+  const COUNT = 30;
+  const candleW = W / COUNT - 2;
+  let price = 70;
+  const candles = [];
+ 
+  for (let i = 0; i < COUNT; i++) {
+    const change = (Math.random() - 0.45) * 6;
+    const open = price;
+    price = Math.max(20, Math.min(120, price + change));
+    const close = price;
+    const high = Math.max(open, close) + Math.random() * 4;
+    const low = Math.min(open, close) - Math.random() * 4;
+    candles.push({ open, close, high, low });
+  }
+ 
+  function priceToY(p) { return H - ((p - 10) / 120) * H; }
+ 
+  function render() {
+    g.innerHTML = '';
+    candles.forEach((c, i) => {
+      const x = i * (candleW + 2) + 1;
+      const isUp = c.close >= c.open;
+      const yHigh = priceToY(c.high);
+      const yLow = priceToY(c.low);
+      const yOpen = priceToY(c.open);
+      const yClose = priceToY(c.close);
+      const bodyTop = Math.min(yOpen, yClose);
+      const bodyH = Math.max(2, Math.abs(yClose - yOpen));
+ 
+      const grp = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      grp.setAttribute('class', 'candle ' + (isUp ? 'up' : 'down'));
+ 
+      const wick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      wick.setAttribute('class', 'wick');
+      wick.setAttribute('x1', x + candleW / 2);
+      wick.setAttribute('x2', x + candleW / 2);
+      wick.setAttribute('y1', yHigh);
+      wick.setAttribute('y2', yLow);
+ 
+      const body = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      body.setAttribute('x', x);
+      body.setAttribute('y', bodyTop);
+      body.setAttribute('width', candleW);
+      body.setAttribute('height', bodyH);
+      body.setAttribute('rx', 1);
+ 
+      grp.appendChild(wick);
+      grp.appendChild(body);
+      g.appendChild(grp);
+    });
+  }
+  render();
+ 
+  // Slow live update — shift left, append new
+  setInterval(() => {
+    const last = candles[candles.length - 1].close;
+    const change = (Math.random() - 0.5) * 5;
+    const newClose = Math.max(20, Math.min(120, last + change));
+    const open = last;
+    const high = Math.max(open, newClose) + Math.random() * 3;
+    const low = Math.min(open, newClose) - Math.random() * 3;
+    candles.shift();
+    candles.push({ open, close: newClose, high, low });
+    render();
+  }, 2200);
+})();
+ 
+/* =========================================================
+   6. INTERSECTION OBSERVER REVEALS
+   ========================================================= */
+(() => {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+ 
+  document.querySelectorAll('.reveal, .tl-item').forEach(el => io.observe(el));
+})();
+ 
+/* =========================================================
+   7. STAT COUNTERS
+   ========================================================= */
+(() => {
+  const stats = document.querySelectorAll('.stat__num');
+  const animated = new WeakSet();
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !animated.has(entry.target)) {
+        animated.add(entry.target);
+        const target = +entry.target.dataset.count;
+        const span = entry.target.querySelector('.num');
+        const dur = 1600;
+        const start = performance.now();
+        function tick(t) {
+          const p = Math.min(1, (t - start) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          span.textContent = Math.round(eased * target);
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    });
+  }, { threshold: 0.4 });
+  stats.forEach(s => io.observe(s));
+})();
+ 
+/* =========================================================
+   8. SKILL BAR FILL
+   ========================================================= */
+(() => {
+  const bars = document.querySelectorAll('.bar__fill');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const pct = entry.target.dataset.fill;
+        entry.target.style.width = pct + '%';
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  bars.forEach(b => io.observe(b));
+})();
+ 
+/* =========================================================
+   9. PROJECT FILTERS
+   ========================================================= */
+(() => {
+  const filters = document.querySelectorAll('.filter');
+  const projects = document.querySelectorAll('.project');
+  filters.forEach(f => {
+    f.addEventListener('click', () => {
+      filters.forEach(x => x.classList.remove('active'));
+      f.classList.add('active');
+      const tag = f.dataset.filter;
+      projects.forEach(p => {
+        const match = tag === 'all' || p.dataset.tag === tag;
+        p.classList.toggle('hidden', !match);
+      });
+    });
+  });
+})();
+ 
+/* =========================================================
+   10. CONTACT FORM (mailto handoff + toast)
+   ========================================================= */
+(() => {
+  const form = document.getElementById('contactForm');
+  const toast = document.getElementById('toast');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = encodeURIComponent(document.getElementById('name').value);
+    const email = encodeURIComponent(document.getElementById('email').value);
+    const message = encodeURIComponent(document.getElementById('message').value);
+    const subject = `Portfolio enquiry from ${decodeURIComponent(name)}`;
+    const body = `From: ${decodeURIComponent(name)} (${decodeURIComponent(email)})%0D%0A%0D%0A${message}`;
+    window.location.href = `mailto:deepanshugarg2110@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  });
+})();
+</script>
+</body>
+</html>
